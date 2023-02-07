@@ -1,25 +1,31 @@
-# lillero-loader
-*don't do coremods*
+# Lillero-loader
+*"don't do coremods"*
 
-A simple LaunchPlugin loading bare ASM patches into our beloved block game.
+Lillero-loader is a [ModLauncher](https://github.com/McModLauncher/modlauncher) plugin applying bare ASM patches to our beloved block game.
 
 ## Why
-Until minecraft 1.12, modifying minecraft game code wasn't too esoteric: it was necessary to register as "CoreMod", but Forge would then load your mod when minecraft itself was loading, allowing to lookup classes and patch them.
-Since 1.13+ `net.minecraft.launchwrapper.Launch` and `net.minecraftforge.fml.relauncher.IFMLLoadingPlugin` are no longer available, replaced by cpw's modlauncher. This makes a new approach necessary.
+Up to Minecraft 1.12, patching the game's code wasn't such a complicated ordeal for a Forge modder: it was as simple as writing a "CoreMod" (even though in the more recent versions the Forge forums have been rather unkind to anyone dabbling in such things, from which comes our motto).
+
+Forge would then load your mod when Minecraft itself was loading, allowing the developer to look up classes and patch them. Unfortunately, in 1.13+ the Forge team heavily reworked their code, making it impossible - as far as we can tell - to make CoreMods the same way we always did.
+
+With `IFMLLoadingPlugin` gone, Forge and Mixin are now using [ModLauncher](https://github.com/McModLauncher/modlauncher) to modify the game's code. Refusing to give up our right to torture ourselves by writing bytecode, we set out to find a new way to do ASM patching.
+
+We found it, and decided to share it with you, to spare you the pain of reading all that undocumented code.
 
 ## How
-Modlauncher loads some Java services at startup (using builtin [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism), allowing to load arbitrary classes and modules when launching Minecraft.
-More specifically, the `ILaunchPluginService` is loaded before game classes are put in memory, and is passed all game classes for patching. This allows us to create a custom Launch Plugin (this project) that will load and apply arbitrary patches at start time.
-Patches must be defined themselves as services inside each mod, implementing `IInjector` (from [lll](https://git.fantabos.co/lillero)) They must define in which class they will patch, and which method, and then implement an `inject()` method which will be called with the correct Method Node.
-Note that, as of now, Searge names must be used for methods and fields.
+ModLauncher works by using [Java services](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html): mods seeking to use it, such as Forge, Mixin and ourselves, implement one of their service interfaces and register themselves as such.
 
-### I know what I'm doing, spill your beans
-Basically, our `ILaunchPluginService` implements 3 methods which are called in 3 phases:
- * `addResources()` : will be called first for each external mod that was found, providing an absolute path to the jar. Our LaunchPlugin will try to load `IInjector` services from each of these resources, saving them for later.
- * `handlesClass()` : will be called for each game class modlauncher discovered. Our LaunchPlugin will signal that it wants to change classes for which an `IInjector` was registered.
- * `processClassWithFlags()` : will be called for each game class which was signaled before, allowing to apply modifications to it.
+Depending on what kind of service you registered as, your mod will be called at a specific time of loading. In our case, we are a `ILaunchPluginService`: we are loaded just before game classes are loaded in memory, and are fed their bytecode for patching.
 
-*Technically, `handlesClass()` and `processClassWithFlags()` are called concurrently, but assuming they don't make the explanation easier.*
+This plugin only recognises patches written using `IInjector` from the [Lillero](https://git.fantabos.co/lillero) library. More details on the project's page.
+
+### I know what I'm doing, tell me how the magic works
+`LilleroLoader` implements the `ILaunchPluginService` interface and three of its methods. These methods are called in three phases*.
+ * `addResources()`: will be called first for each external mod that was found, providing an absolute path to the JAR. `LilleroLoader` will try to load `IInjector` services from each of these JARs, saving them for later.
+ * `handlesClass()`: will be called for each game class ModLauncher discovered. `LilleroLoader` will mark each of the classes the various `IInjector` asked for.
+ * `processClassWithFlags()`: will be called for each marked game class, allowing to apply modifications to it.
+
+*Technically, `handlesClass()` and `processClassWithFlags()` are called one after the other for each class loaded, but it's easier to understand if you disregard that.
 
 # Installation
 Right now the only way to include this loader in your Minecraft instance is to modify the launch profile adding it to the loaded classes.
@@ -50,4 +56,4 @@ Edit your target instance and go into "Versions". Select "Forge", click "Customi
 ```
 
 ### Vanilla launcher
-Undocumented at current time
+Not documented yet, but should be possible by messing in a similar way with the version json files.
