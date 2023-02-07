@@ -20,3 +20,34 @@ Basically, our `ILaunchPluginService` implements 3 methods which are called in 3
  * `processClassWithFlags()` : will be called for each game class which was signaled before, allowing to apply modifications to it.
 
 *Technically, `handlesClass()` and `processClassWithFlags()` are called concurrently, but assuming they don't make the explanation easier.*
+
+# Installation
+Right now the only way to include this loader in your Minecraft instance is to modify the launch profile adding it to the loaded classes.
+
+### MultiMC / PolyMC / PrismLauncher
+Edit your target instance and go into "Versions". Select "Forge", click "Customize" and then "Edit". A text editor should open on a json file. Inside the `libraries` array add the following objects:
+```json
+    {
+        "downloads": {
+            "artifact": {
+                "sha1": "3f51da8dd7df6044190f1fe86500b9793d806d0d",
+                "size": 865,
+                "url": "https://maven.fantabos.co/ftbsc/lll/0.0.4/lll-0.0.4.jar"
+            }
+        },
+        "name": "ftbsc:lll:0.0.4"
+    },
+    {
+        "downloads": {
+            "artifact": {
+                "sha1": "2d7b816468af42f81b1b82f8c0ea8f373396ae61",
+                "size": 4193,
+                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.0.5/loader-0.0.5.jar"
+            }
+        },
+        "name": "ftbsc.lll:loader:0.0.5"
+    },
+```
+
+### Vanilla launcher
+Undocumented at current time
