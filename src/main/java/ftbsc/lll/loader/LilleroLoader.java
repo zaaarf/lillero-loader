@@ -19,9 +19,11 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LilleroLoader implements ILaunchPluginService {
@@ -34,6 +36,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	public static final String NAME = "lll-loader";
 
 	private List<IInjector> injectors = new ArrayList<>();
+	private Set<IInjector> applied = new HashSet<>();
 
 	public LilleroLoader() {
 		LOGGER.info(INIT, "Patch Loader initialized");
@@ -85,9 +88,10 @@ public class LilleroLoader implements ILaunchPluginService {
 	public EnumSet<Phase> handlesClass(Type classType, final boolean isEmpty, final String reason) {
 		if (isEmpty) return NAY;
 		// TODO can I make a set of target classes to make this faster
+		LOGGER.debug(HANDLER, "Inspecting class {}", classType.getClassName());
 		for (IInjector inj : this.injectors) {
-			if (inj.targetClass().equals(classType.getClassName())) {
-				LOGGER.debug(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
+			if (!this.applied.contains(inj) && inj.targetClass().equals(classType.getClassName())) {
+				LOGGER.info(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
 				return YAY;
 			}
 		}
@@ -101,6 +105,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	public int processClassWithFlags(Phase phase, ClassNode classNode, Type classType, String reason) {
 		LOGGER.debug(PATCHER, "Processing class {} in phase {} of {}", classType.getClassName(), phase.name(), reason);
 		List<IInjector> relevantInjectors = this.injectors.stream()
+			.filter(i -> !this.applied.contains(i))
 			.filter(i -> i.targetClass().equals(classType.getClassName()))
 			.collect(Collectors.toList());
 		boolean modified = false;
@@ -113,6 +118,7 @@ public class LilleroLoader implements ILaunchPluginService {
 					LOGGER.info(PATCHER, "Patching {}.{} with {} ({})", classType.getClassName(), method.name, inj.name(), inj.reason());
 					try {
 						inj.inject(classNode, method);
+						this.applied.add(inj);
 						modified = true;
 					} catch (InjectionException e) {
 						LOGGER.error(PATCHER, "Error applying patch '{}' : {}", inj.name(), e.toString());
