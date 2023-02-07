@@ -7,6 +7,8 @@ import ftbsc.lll.exception.InjectionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -23,13 +25,18 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class LilleroLoader implements ILaunchPluginService {
-	public static final Logger LOGGER = LogManager.getLogger(LilleroLoader.class.getCanonicalName());
+	private static final Logger LOGGER = LogManager.getLogger(LilleroLoader.class.getCanonicalName());
+	private static final Marker INIT     = MarkerManager.getMarker("INIT");
+	private static final Marker RESOURCE = MarkerManager.getMarker("RESOURCE");
+	private static final Marker HANDLER  = MarkerManager.getMarker("HANDLER");
+	private static final Marker PATCHER  = MarkerManager.getMarker("PATCHER");
+
 	public static final String NAME = "lll-loader";
 
 	private List<IInjector> injectors = new ArrayList<>();
 
 	public LilleroLoader() {
-		LOGGER.info("INIT", "Patch Loader initialized");
+		LOGGER.info(INIT, "Patch Loader initialized");
 	}
 
 	@Override
@@ -42,23 +49,23 @@ public class LilleroLoader implements ILaunchPluginService {
 
 	@Override
 	public void offerResource(Path resource, String name) {
-		LOGGER.error("RESOURCE", String.format("Resource offered to us (%s@%s) but no action was taken", name, resource.toString()));
+		LOGGER.warn(RESOURCE, "Resource offered to us ({}@{}) but no action was taken", name, resource.toString());
 	}
 
 	@Override
 	public void addResources(List<Map.Entry<String, Path>> resources) {
-		LOGGER.debug("RESOURCE", "Resources being added:");
+		LOGGER.debug(RESOURCE, "Resources being added:");
 		for (Map.Entry<String, Path> row : resources) {
-			LOGGER.debug("RESOURCE", String.format("> %s (%s)", row.getKey(), row.getValue().toString()));
+			LOGGER.debug(RESOURCE, "> {} ({})", row.getKey(), row.getValue().toString());
 			try {
 				URL jarUrl = new URL("file:" + row.getValue().toString());
 				URLClassLoader loader = new URLClassLoader(new URL[] { jarUrl });
 				for (IInjector inj : ServiceLoader.load(IInjector.class, loader)) {
-					LOGGER.info("RESOURCE", String.format("Registering injector %s", inj.name()));
+					LOGGER.info(RESOURCE, "Registering injector {}", inj.name());
 					this.injectors.add(inj);
 				}
 			} catch (MalformedURLException e) {
-				LOGGER.error("RESOURCE", String.format("Malformed URL for resource %s - 'file:%s'", row.getKey(), row.getValue().toString()));
+				LOGGER.error(RESOURCE, "Malformed URL for resource {} - 'file:{}'", row.getKey(), row.getValue().toString());
 			}
 		}
 	}
@@ -80,7 +87,7 @@ public class LilleroLoader implements ILaunchPluginService {
 		// TODO can I make a set of target classes to make this faster
 		for (IInjector inj : this.injectors) {
 			if (inj.targetClass().equals(classType.getClassName())) {
-				LOGGER.debug("HANDLER", String.format("Marked class %s as handled by us", classType.getClassName()));
+				LOGGER.debug(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
 				return YAY;
 			}
 		}
@@ -92,7 +99,7 @@ public class LilleroLoader implements ILaunchPluginService {
 
 	@Override
 	public int processClassWithFlags(Phase phase, ClassNode classNode, Type classType, String reason) {
-		LOGGER.debug("PATCHER", "Processing class {} in phase {} of {}", classType.getClassName(), phase.name(), reason);
+		LOGGER.debug(PATCHER, "Processing class {} in phase {} of {}", classType.getClassName(), phase.name(), reason);
 		List<IInjector> relevantInjectors = this.injectors.stream()
 			.filter(i -> i.targetClass().equals(classType.getClassName()))
 			.collect(Collectors.toList());
@@ -103,12 +110,12 @@ public class LilleroLoader implements ILaunchPluginService {
 					inj.methodName().equals(method.name) &&
 					inj.methodDesc().equals(method.desc)
 				) {
-					LOGGER.info("PATCHER", String.format("Patching %s.%s with %s (%s)", classType.getClassName(), method.name, inj.name(), inj.reason()));
+					LOGGER.info(PATCHER, "Patching {}.{} with {} ({})", classType.getClassName(), method.name, inj.name(), inj.reason());
 					try {
 						inj.inject(classNode, method);
 						modified = true;
 					} catch (InjectionException e) {
-						LOGGER.error("PATCHER", String.format("Error applying patch '%s' : %s", inj.name(), e.toString()));
+						LOGGER.error(PATCHER, "Error applying patch '{}' : {}", inj.name(), e.toString());
 					}
 				}
 			}

@@ -40,12 +40,12 @@ Edit your target instance and go into "Versions". Select "Forge", click "Customi
     {
         "downloads": {
             "artifact": {
-                "sha1": "91770ff7cd9c8adc03e24ab03056ecafbb9f6e71",
-                "size": 4468,
-                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.0.6/loader-0.0.6.jar"
+                "sha1": "fe23393f61060cacdc2a767ad82057006a923007",
+                "size": 4568,
+                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.0.7/loader-0.0.7.jar"
             }
         },
-        "name": "ftbsc.lll:loader:0.0.6"
+        "name": "ftbsc.lll:loader:0.0.7"
     },
 ```
 
