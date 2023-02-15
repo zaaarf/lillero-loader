@@ -36,23 +36,24 @@ Edit your target instance and go into "Versions". Select "Forge", click "Customi
     {
         "downloads": {
             "artifact": {
-                "sha1": "2af308a2026453c4bfe814b42bb71cb579c32a40",
-                "size": 1502,
-                "url": "https://maven.fantabos.co/ftbsc/lll/0.0.5/lll-0.0.5.jar"
+                "sha1": "7d94cad0cc7e787fe9a2197e60058bd67b74f471",
+                "size": 13076,
+                "url": "https://maven.fantabos.co/ftbsc/lll/0.1.2/lll-0.1.2.jar"
             }
         },
-        "name": "ftbsc:lll:0.0.5"
+        "name": "ftbsc:lll:0.1.2"
     },
     {
         "downloads": {
             "artifact": {
-                "sha1": "fe23393f61060cacdc2a767ad82057006a923007",
-                "size": 4568,
-                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.0.7/loader-0.0.7.jar"
+                "sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
+                "size": 4779,
+                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
             }
         },
-        "name": "ftbsc.lll:loader:0.0.7"
+        "name": "ftbsc.lll:loader:0.1.2"
     },
+
 ```
 
 ### Vanilla launcher
