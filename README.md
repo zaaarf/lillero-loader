@@ -4,9 +4,7 @@
 Lillero-loader is a [ModLauncher](https://github.com/McModLauncher/modlauncher) plugin applying bare ASM patches to our beloved block game.
 
 ## Why
-Up to Minecraft 1.12, patching the game's code wasn't such a complicated ordeal for a Forge modder: it was as simple as writing a "CoreMod" (even though in the more recent versions the Forge forums have been rather unkind to anyone dabbling in such things, from which comes our motto).
-
-Forge would then load your mod when Minecraft itself was loading, allowing the developer to look up classes and patch them. Unfortunately, in 1.13+ the Forge team heavily reworked their code, making it impossible - as far as we can tell - to make CoreMods the same way we always did.
+If one really wants to, patching the game's code is not that difficult: it was as simple as writing a "CoreMod". Forge would then load your mod when Minecraft itself was loading, allowing the developer to look up classes and patch them. This, however, is pretty inefficient, as it's applied at runtime. This system allows you to apply ASM patches on the same level as Mixin: before the game actually starts.
 
 With `IFMLLoadingPlugin` gone, Forge and Mixin are now using [ModLauncher](https://github.com/McModLauncher/modlauncher) to modify the game's code. Refusing to give up our right to torture ourselves by writing bytecode, we set out to find a new way to do ASM patching.
 
@@ -25,10 +23,37 @@ This plugin only recognises patches written using `IInjector` from the [Lillero]
  * `handlesClass()`: will be called for each game class ModLauncher discovered. `LilleroLoader` will mark each of the classes the various `IInjector` asked for.
  * `processClassWithFlags()`: will be called for each marked game class, allowing to apply modifications to it.
 
-*Technically, `handlesClass()` and `processClassWithFlags()` are called one after the other for each class loaded, but it's easier to understand if you disregard that.
+\*Technically, `handlesClass()` and `processClassWithFlags()` are called one after the other for each class loaded, but it's easier to understand if you disregard that.
 
-# Installation
-Right now the only way to include this loader in your Minecraft instance is to modify the launch profile adding it to the loaded classes.
+## Installation
+Right now the only way to include this loader in your Minecraft instance is to modify the launch profile adding it to the loaded classes. Eventually, we will write an installer similar to the one Forge uses to make the installation process painless.
+
+### Vanilla launcher
+Go to the version folder corresponding to the instance you want to install this on - generally the Forge one. You'll find them in your `.minecraft/versions` folder. In each of these folders there's a json file containing the list of libraries loaded on startup: we're going to edit it. The largest part is the `libraries` array. Add these two entries to it:
+```json
+{
+	"downloads": {
+		"artifact": {
+			"sha1": "7d94cad0cc7e787fe9a2197e60058bd67b74f471",
+			"size": 13076,
+			"url": "https://maven.fantabos.co/ftbsc/lll/0.1.2/lll-0.1.2.jar"
+		}
+	},
+	"name": "ftbsc:lll:0.1.2"
+},
+{
+	"downloads": {
+		"artifact": {
+			"sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
+			"size": 4779,
+			"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
+		}
+	},
+	"name": "ftbsc.lll:loader:0.1.2"
+}
+```
+
+Whether you add them at the start or at the end does not particularly matter, and neither does indentation.
 
 ### MultiMC / PolyMC / PrismLauncher
 Select and edit your target instance and go into the "Version" tab. Click "Add empty", put "Lillero" as name and "ftbsc.lll" as uid. A new library will appear. Select it, press "Edit", and your text editor of choice will open. Replace the contents with:
@@ -62,8 +87,4 @@ Select and edit your target instance and go into the "Version" tab. Click "Add e
     "uid": "ftbsc.lll",
     "version": "1"
 }
-
 ```
-
-### Vanilla launcher
-Not documented yet, but should be possible by messing in a similar way with the version json files.
