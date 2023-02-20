@@ -31,8 +31,12 @@ This plugin only recognises patches written using `IInjector` from the [Lillero]
 Right now the only way to include this loader in your Minecraft instance is to modify the launch profile adding it to the loaded classes.
 
 ### MultiMC / PolyMC / PrismLauncher
-Edit your target instance and go into "Versions". Select "Forge", click "Customize" and then "Edit". A text editor should open on a json file. Inside the `libraries` array add the following objects:
+Select and edit your target instance and go into the "Version" tab. Click "Add empty", put "Lillero" as name and "ftbsc.lll" as uid. A new library will appear. Select it, press "Edit", and your text editor of choice will open. Replace the contents with:
+
 ```json
+{
+    "formatVersion": 1,
+    "libraries": [
     {
         "downloads": {
             "artifact": {
@@ -52,7 +56,12 @@ Edit your target instance and go into "Versions". Select "Forge", click "Customi
             }
         },
         "name": "ftbsc.lll:loader:0.1.2"
-    },
+    }
+    ],
+    "name": "Lillero",
+    "uid": "ftbsc.lll",
+    "version": "1"
+}
 
 ```
 
