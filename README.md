@@ -65,26 +65,26 @@ Select and edit your target instance and go into the "Version" tab. Click "Add e
     {
         "downloads": {
             "artifact": {
-                "sha1": "7d94cad0cc7e787fe9a2197e60058bd67b74f471",
-                "size": 13076,
+                "sha1": "2e1c8a08d553b244d1020ab1a2568b9253ceb1c4",
+                "size": 16297,
                 "url": "https://maven.fantabos.co/ftbsc/lll/0.2.0/lll-0.2.0.jar"
             }
         },
-        "name": "ftbsc:lll:0.1.2"
+        "name": "ftbsc:lll:0.2.0"
     },
     {
         "downloads": {
             "artifact": {
                 "sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
                 "size": 4779,
-                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.2.0/loader-0.2.0.jar"
+                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
             }
         },
-        "name": "ftbsc.lll:loader:0.2.0"
+        "name": "ftbsc.lll:loader:0.1.2"
     }
     ],
     "name": "Lillero",
     "uid": "ftbsc.lll",
-    "version": "1"
+    "version": "0.2"
 }
 ```
