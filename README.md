@@ -34,19 +34,19 @@ Go to the version folder corresponding to the instance you want to install this 
 {
 	"downloads": {
 		"artifact": {
-			"sha1": "7d94cad0cc7e787fe9a2197e60058bd67b74f471",
-			"size": 13076,
-			"url": "https://maven.fantabos.co/ftbsc/lll/0.2.0/lll-0.2.0.jar"
+			"sha1": "cc97bee1d4fb382656c2cb85614bbabe8495a74d",
+			"size": 16291,
+			"url": "https://maven.fantabos.co/ftbsc/lll/0.2.1/lll-0.2.1.jar"
 		}
 	},
-	"name": "ftbsc:lll:0.2.0"
+	"name": "ftbsc:lll:0.2.1"
 },
 {
 	"downloads": {
 		"artifact": {
 			"sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
 			"size": 4779,
-			"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.2.0/loader-0.2.0.jar"
+			"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
 		}
 	},
 	"name": "ftbsc.lll:loader:0.1.2"
