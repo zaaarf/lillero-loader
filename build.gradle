@@ -1,6 +1,10 @@
 plugins {
 	id 'java-library'
+	id 'com.palantir.git-version' version '0.13.0'
 }
+
+archivesBaseName = 'loader'
+version = gitVersion()
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
@@ -18,3 +22,6 @@ dependencies {
 	implementation 'ftbsc:lll:0.3.0'
 }
 
+jar {
+	archiveFileName = "${jar.archiveBaseName.get()}-${project.version.split('-')[0]}.${jar.archiveExtension.get()}"
+}
