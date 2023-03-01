@@ -34,22 +34,22 @@ Go to the version folder corresponding to the instance you want to install this 
 {
 	"downloads": {
 		"artifact": {
-			"sha1": "6c47486b1045652bbbf9d684e971441106a70c3b",
-			"size": 16951,
-			"url": "https://maven.fantabos.co/ftbsc/lll/0.2.2/lll-0.2.2.jar"
+			"sha1": "12a2623a62416575315543b488ab348f41401a6d",
+			"size": 25006,
+			"url": "https://maven.fantabos.co/ftbsc/lll/0.3.0/lll-0.3.0.jar"
 		}
 	},
-	"name": "ftbsc:lll:0.2.2"
+	"name": "ftbsc:lll:0.3.0"
 },
 {
 	"downloads": {
 		"artifact": {
-			"sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
-			"size": 4779,
-			"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
+			"sha1": "71c8bd92b4aaab8f9b6bdd639e115b01d7060cb3",
+			"size": 4667,
+			"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.3/loader-0.1.3.jar"
 		}
 	},
-	"name": "ftbsc.lll:loader:0.1.2"
+	"name": "ftbsc.lll:loader:0.1.3"
 }
 ```
 
@@ -65,26 +65,26 @@ Select and edit your target instance and go into the "Version" tab. Click "Add e
     {
         "downloads": {
             "artifact": {
-                "sha1": "2e1c8a08d553b244d1020ab1a2568b9253ceb1c4",
-                "size": 16297,
-                "url": "https://maven.fantabos.co/ftbsc/lll/0.2.0/lll-0.2.0.jar"
+                "sha1": "12a2623a62416575315543b488ab348f41401a6d",
+                "size": 25006,
+                "url": "https://maven.fantabos.co/ftbsc/lll/0.3.0/lll-0.3.0.jar"
             }
         },
-        "name": "ftbsc:lll:0.2.0"
+        "name": "ftbsc:lll:0.3.0"
     },
     {
         "downloads": {
             "artifact": {
-                "sha1": "a11968731cb3400535bde46b387b8e7f9375bb5b",
-                "size": 4779,
-                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.2/loader-0.1.2.jar"
+                "sha1": "71c8bd92b4aaab8f9b6bdd639e115b01d7060cb3",
+                "size": 4667,
+                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.3/loader-0.1.3.jar"
             }
         },
-        "name": "ftbsc.lll:loader:0.1.2"
+        "name": "ftbsc.lll:loader:0.1.3"
     }
     ],
     "name": "Lillero",
     "uid": "ftbsc.lll",
-    "version": "0.2"
+    "version": "0.3"
 }
 ```

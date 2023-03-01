@@ -3,7 +3,7 @@ package ftbsc.lll.loader;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
 
 import ftbsc.lll.IInjector;
-import ftbsc.lll.exception.InjectionException;
+import ftbsc.lll.exceptions.InjectionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
