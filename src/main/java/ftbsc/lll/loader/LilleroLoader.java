@@ -17,11 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LilleroLoader implements ILaunchPluginService {
@@ -33,7 +29,8 @@ public class LilleroLoader implements ILaunchPluginService {
 
 	public static final String NAME = "lll-loader";
 
-	private List<IInjector> injectors = new ArrayList<>();
+	private final Set<IInjector> injectors = new HashSet<>();
+	private final Set<String> targetClasses = new HashSet<>();
 
 	public LilleroLoader() {
 		LOGGER.info(INIT, "Patch Loader initialized");
@@ -63,6 +60,7 @@ public class LilleroLoader implements ILaunchPluginService {
 				for (IInjector inj : ServiceLoader.load(IInjector.class, loader)) {
 					LOGGER.info(RESOURCE, "Registering injector {}", inj.name());
 					this.injectors.add(inj);
+					this.targetClasses.add(inj.targetClass());
 				}
 			} catch (MalformedURLException e) {
 				LOGGER.error(RESOURCE, "Malformed URL for resource {} - 'file:{}'", row.getKey(), row.getValue().toString());
@@ -84,13 +82,10 @@ public class LilleroLoader implements ILaunchPluginService {
 	@Override
 	public EnumSet<Phase> handlesClass(Type classType, final boolean isEmpty, final String reason) {
 		if (isEmpty) return NAY;
-		// TODO can I make a set of target classes to make this faster
 		LOGGER.debug(HANDLER, "Inspecting class {}", classType.getClassName());
-		for (IInjector inj : this.injectors) {
-			if (inj.targetClass().equals(classType.getClassName())) {
-				LOGGER.info(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
-				return YAY;
-			}
+		if(targetClasses.contains(classType.getClassName())) {
+			LOGGER.info(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
+			return YAY;
 		}
 		return NAY;
 	}
