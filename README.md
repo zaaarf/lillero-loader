@@ -34,12 +34,12 @@ Go to the version folder corresponding to the instance you want to install this 
 {
 	"downloads": {
 		"artifact": {
-			"sha1": "12a2623a62416575315543b488ab348f41401a6d",
-			"size": 25006,
-			"url": "https://maven.fantabos.co/ftbsc/lll/0.3.0/lll-0.3.0.jar"
+			"sha1": "9c4557c772a2c06c9028d616d711eda9fb6a009e",
+			"size": 21144,
+			"url": "https://maven.fantabos.co/ftbsc/lll/0.3.1/lll-0.3.1.jar"
 		}
 	},
-	"name": "ftbsc:lll:0.3.0"
+	"name": "ftbsc:lll:0.3.1"
 },
 {
 	"downloads": {
@@ -65,12 +65,12 @@ Select and edit your target instance and go into the "Version" tab. Click "Add e
     {
         "downloads": {
             "artifact": {
-                "sha1": "12a2623a62416575315543b488ab348f41401a6d",
-                "size": 25006,
-                "url": "https://maven.fantabos.co/ftbsc/lll/0.3.0/lll-0.3.0.jar"
+                "sha1": "9c4557c772a2c06c9028d616d711eda9fb6a009e",
+                "size": 21144,
+                "url": "https://maven.fantabos.co/ftbsc/lll/0.3.1/lll-0.3.1.jar"
             }
         },
-        "name": "ftbsc:lll:0.3.0"
+        "name": "ftbsc:lll:0.3.1"
     },
     {
         "downloads": {
