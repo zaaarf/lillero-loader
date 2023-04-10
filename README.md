@@ -34,12 +34,12 @@ Go to the version folder corresponding to the instance you want to install this 
 {
 	"downloads": {
 		"artifact": {
-			"sha1": "91defb1dff803c2ed1d3feccba7959810d2ac2db",
-			"size": 21396,
-			"url": "https://maven.fantabos.co/ftbsc/lll/0.3.4/lll-0.3.4.jar"
+			"sha1": "e76e307e791314de56f9b1f90fdffaf5992794c1",
+			"size": 26762,
+			"url": "https://maven.fantabos.co/ftbsc/lll/0.4.1/lll-0.4.1.jar"
 		}
 	},
-	"name": "ftbsc:lll:0.3.4"
+	"name": "ftbsc:lll:0.4.1"
 },
 {
 	"downloads": {
@@ -60,31 +60,31 @@ Select and edit your target instance and go into the "Version" tab. Click "Add e
 
 ```json
 {
-    "formatVersion": 1,
-    "libraries": [
-    {
-        "downloads": {
-            "artifact": {
-                "sha1": "91defb1dff803c2ed1d3feccba7959810d2ac2db",
-                "size": 21396,
-                "url": "https://maven.fantabos.co/ftbsc/lll/0.3.4/lll-0.3.4.jar"
-            }
-        },
-        "name": "ftbsc:lll:0.3.4"
-    },
-    {
-        "downloads": {
-            "artifact": {
-                "sha1": "71c8bd92b4aaab8f9b6bdd639e115b01d7060cb3",
-                "size": 4667,
-                "url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.3/loader-0.1.3.jar"
-            }
-        },
-        "name": "ftbsc.lll:loader:0.1.3"
-    }
-    ],
-    "name": "Lillero",
-    "uid": "ftbsc.lll",
-    "version": "0.3"
+	"formatVersion": 1,
+	"libraries": [
+		{
+			"downloads": {
+				"artifact": {
+					"sha1": "e76e307e791314de56f9b1f90fdffaf5992794c1",
+					"size": 26762,
+					"url": "https://maven.fantabos.co/ftbsc/lll/0.4.1/lll-0.4.1.jar"
+				}
+			},
+			"name": "ftbsc:lll:0.4.1"
+		},
+		{
+			"downloads": {
+				"artifact": {
+					"sha1": "71c8bd92b4aaab8f9b6bdd639e115b01d7060cb3",
+					"size": 4667,
+					"url": "https://maven.fantabos.co/ftbsc/lll/loader/0.1.3/loader-0.1.3.jar"
+				}
+			},
+			"name": "ftbsc.lll:loader:0.1.3"
+		}
+	],
+	"name": "Lillero",
+	"uid": "ftbsc.lll",
+	"version": "0.4"
 }
 ```
