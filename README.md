@@ -1,4 +1,4 @@
-# Lillero-loader
+Lillero-loader
 *"don't do coremods"*
 
 Lillero-loader is a [ModLauncher](https://github.com/McModLauncher/modlauncher) plugin applying bare ASM patches to our beloved block game.
@@ -15,7 +15,7 @@ ModLauncher works by using [Java services](https://docs.oracle.com/javase/8/docs
 
 Depending on what kind of service you registered as, your mod will be called at a specific time of loading. In our case, we are a `ILaunchPluginService`: we are loaded just before game classes are loaded in memory, and are fed their bytecode for patching.
 
-This plugin only recognises patches written using `IInjector` from the [Lillero](https://git.fantabos.co/lillero) library. More details on the project's page.
+This plugin only recognises patches written using `IInjector` from the [Lillero](https://github.com/zaaarf/lillero) library. More details on the project's page.
 
 ### I know what I'm doing, tell me how the magic works
 `LilleroLoader` implements the `ILaunchPluginService` interface and three of its methods. These methods are called in three phases*.
