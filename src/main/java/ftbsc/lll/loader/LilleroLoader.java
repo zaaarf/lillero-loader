@@ -66,6 +66,9 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	private final Set<String> targetClasses = new HashSet<>();
 
+	/**
+	 * THe default constructor.
+	 */
 	public LilleroLoader() {
 		LOGGER.info(INIT, "Patch Loader initialized");
 	}
