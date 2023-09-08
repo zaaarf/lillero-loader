@@ -12,6 +12,12 @@ java {
 	withJavadocJar()
 }
 
+javadoc {
+	options {
+		links 'https://lll.fantabos.co/javadoc/lillero'
+	}
+}
+
 repositories {
 	maven { url = 'https://maven.minecraftforge.net/' }
 	maven { url = 'https://maven.fantabos.co' }
