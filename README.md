@@ -1,4 +1,4 @@
-Lillero-loader
+# Lillero-loader
 *"don't do coremods"*
 
 Lillero-loader is a [ModLauncher](https://github.com/McModLauncher/modlauncher) plugin applying bare ASM patches to our beloved block game.
