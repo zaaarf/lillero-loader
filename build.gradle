@@ -14,7 +14,7 @@ java {
 
 javadoc {
 	options {
-		links 'https://lll.fantabos.co/javadoc/lillero'
+		links 'https://docs.zaaarf.foo/lillero'
 	}
 }
 
