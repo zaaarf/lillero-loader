@@ -4,7 +4,7 @@ plugins {
 }
 
 archivesBaseName = 'loader'
-version = gitVersion().split('-').getAt(0).replace('dirty', '')
+version = versionDetails().lastTag
 
 java {
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
