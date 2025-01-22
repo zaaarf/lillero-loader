@@ -3,12 +3,9 @@ package ftbsc.lll.loader;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
 
 import ftbsc.lll.IInjector;
-import ftbsc.lll.exceptions.InjectionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -26,9 +23,14 @@ import java.util.stream.Collectors;
  */
 public class LilleroLoader implements ILaunchPluginService {
 	/**
-	 * A Log4j logger instance.
+	 * The JVM arg key which specifies the logging level for this.
 	 */
-	private static final Logger LOGGER = LogManager.getLogger(LilleroLoader.class.getCanonicalName());
+	private static final String LEVEL_KEY = "lll.logging.level";
+
+	/**
+	 * The unique identifier assigned to this plugin.
+	 */
+	public static final String NAME = "lll-loader";
 
 	/**
 	 * A Marker for the logger, used during the initialisation phase.
@@ -51,9 +53,12 @@ public class LilleroLoader implements ILaunchPluginService {
 	private static final Marker PATCHER = MarkerManager.getMarker("PATCHER");
 
 	/**
-	 * The unique identifier assigned to this plugin.
+	 * A Log4j logger instance.
 	 */
-	public static final String NAME = "lll-loader";
+	protected final Logger logger = Configurator.setLevel(
+		LogManager.getLogger(),
+		Level.toLevel(System.getProperty(LEVEL_KEY), Level.INFO)
+	);
 
 	/**
 	 * A Set used to hold declared injectors.
@@ -70,7 +75,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	 * THe default constructor.
 	 */
 	public LilleroLoader() {
-		LOGGER.info(INIT, "Patch Loader initialized");
+		this.logger.info(INIT, "Patch Loader initialized");
 	}
 
 	/**
@@ -91,7 +96,12 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	@Override
 	public void offerResource(Path resource, String name) {
-		LOGGER.warn(RESOURCE, "Resource offered to us ({}@{}) but no action was taken", name, resource.toString());
+		this.logger.warn( // log what happened
+			RESOURCE,
+			"Resource offered to us ({}@{}) but no action was taken",
+			name,
+			resource
+		);
 	}
 
 	/**
@@ -103,23 +113,27 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	@Override
 	public void addResources(List<Map.Entry<String, Path>> resources) {
-		LOGGER.debug(RESOURCE, "Resources being added:");
-		for (Map.Entry<String, Path> row : resources) {
-			LOGGER.debug(RESOURCE, "> {} ({})", row.getKey(), row.getValue().toString());
+		this.logger.debug(RESOURCE, "Resources being added:");
+		for(Map.Entry<String, Path> row : resources) {
+			this.logger.debug(RESOURCE, "> {} ({})", row.getKey(), row.getValue());
 			try {
-				URL jarUrl = new URL("file:" + row.getValue().toString());
+				URL jarUrl = new URL("file:" + row.getValue());
 				URLClassLoader loader = new URLClassLoader(new URL[] { jarUrl });
-				for (IInjector inj : ServiceLoader.load(IInjector.class, loader)) {
-					LOGGER.info(RESOURCE, "Registering injector {}", inj.name());
+				for(IInjector inj : ServiceLoader.load(IInjector.class, loader)) {
+					this.logger.info(RESOURCE, "Registering injector {}", inj.name());
 					this.injectors.add(inj);
 					this.targetClasses.add(inj.targetClass());
 				}
 			} catch (MalformedURLException e) {
-				LOGGER.error(RESOURCE, "Malformed URL for resource {} - 'file:{}'", row.getKey(), row.getValue().toString());
+				this.logger.error(
+					RESOURCE,
+					"Malformed URL for resource {} - 'file:{}'",
+					row.getKey(),
+					row.getValue()
+				);
 			}
 		}
 	}
-
 
 	/**
 	 * What is returned when the class being processed is to be patched.
@@ -141,7 +155,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	@Override
 	public EnumSet<Phase> handlesClass(Type classType, final boolean isEmpty) {
-		return handlesClass(classType, isEmpty, "unspecified");
+		return this.handlesClass(classType, isEmpty, "unspecified");
 	}
 
 	/**
@@ -157,15 +171,20 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	@Override
 	public EnumSet<Phase> handlesClass(Type classType, final boolean isEmpty, final String reason) {
-		if (isEmpty) return NAY;
-		LOGGER.debug(HANDLER, "Inspecting class {}", classType.getClassName());
+		if(isEmpty) return NAY;
+		this.logger.debug(HANDLER, "Inspecting class {}", classType.getClassName());
 		if(targetClasses.contains(classType.getClassName())) {
-			LOGGER.info(HANDLER, "Marked class {} as handled by {}", classType.getClassName(), LilleroLoader.NAME);
+			this.logger.info(
+				HANDLER,
+				"Marked class {} as handled by {}",
+				classType.getClassName(),
+				LilleroLoader.NAME
+			);
+
 			return YAY;
 		}
 		return NAY;
 	}
-
 
 	/**
 	 * Each class loaded is offered to the plugin for processing.
@@ -179,23 +198,36 @@ public class LilleroLoader implements ILaunchPluginService {
 	 */
 	@Override
 	public int processClassWithFlags(Phase phase, ClassNode classNode, Type classType, String reason) {
-		LOGGER.debug(PATCHER, "Processing class {} in phase {} of {}", classType.getClassName(), phase.name(), reason);
+		this.logger.debug(
+			PATCHER,
+			"Processing class {} in phase {} of {}",
+			classType.getClassName(),
+			phase.name(),
+			reason
+		);
+
 		List<IInjector> relevantInjectors = this.injectors.stream()
 			.filter(i -> i.targetClass().equals(classType.getClassName()))
 			.collect(Collectors.toList());
+
 		boolean modified = false;
-		for (MethodNode method : classNode.methods) {
-			for (IInjector inj : relevantInjectors) {
-				if (
-					inj.methodName().equals(method.name) &&
-					inj.methodDesc().equals(method.desc)
-				) {
-					LOGGER.info(PATCHER, "Patching {}.{} with {} ({})", classType.getClassName(), method.name, inj.name(), inj.reason());
+		for(MethodNode method : classNode.methods) {
+			for(IInjector inj : relevantInjectors) {
+				if(inj.methodName().equals(method.name) && inj.methodDesc().equals(method.desc)) {
+					this.logger.info(
+						PATCHER,
+						"Patching {}.{} with {} ({})",
+						classType.getClassName(),
+						method.name,
+						inj.name(),
+						inj.reason()
+					);
+
 					try {
 						inj.inject(classNode, method);
 						modified = true;
-					} catch (InjectionException e) {
-						LOGGER.error(PATCHER, "Error applying patch '{}' : {}", inj.name(), e.toString());
+					} catch(Throwable t) {
+						this.logger.error(PATCHER, "Error applying patch '{}' : {}", inj.name(), t);
 					}
 				}
 			}
