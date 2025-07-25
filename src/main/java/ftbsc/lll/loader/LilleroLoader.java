@@ -55,10 +55,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	/**
 	 * A Log4j logger instance.
 	 */
-	protected final Logger logger = Configurator.setLevel(
-		LogManager.getLogger(),
-		Level.toLevel(System.getProperty(LEVEL_KEY), Level.INFO)
-	);
+	protected final Logger logger = LogManager.getLogger();
 
 	/**
 	 * A Set used to hold declared injectors.
@@ -75,6 +72,7 @@ public class LilleroLoader implements ILaunchPluginService {
 	 * THe default constructor.
 	 */
 	public LilleroLoader() {
+		Configurator.setLevel(this.logger.getName(), Level.toLevel(System.getProperty(LEVEL_KEY), Level.INFO));
 		this.logger.info(INIT, "Patch Loader initialized");
 	}
 
